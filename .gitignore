@@ -1,0 +1,13 @@
+# Nie wrzucaj plików z kluczami
+.env
+.env.*
+secrets.*
+
+# System
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Edytory
+.vscode/
+*.tmp
