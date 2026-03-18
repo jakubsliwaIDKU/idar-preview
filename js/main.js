@@ -24,7 +24,39 @@ function observeFadeIn(root) {
 observeFadeIn(document);
 
 /* ----------------------------------------------------------
-   2. Background slideshows (hero + process)
+   2. Hamburger menu (mobile)
+---------------------------------------------------------- */
+(function () {
+  const btn   = document.querySelector('.nav-hamburger');
+  const links = document.querySelector('.nav-links');
+  if (!btn || !links) return;
+
+  btn.addEventListener('click', () => {
+    const open = links.classList.toggle('nav-open');
+    btn.setAttribute('aria-expanded', open);
+    btn.setAttribute('aria-label', open ? 'Zamknij menu' : 'Otwórz menu');
+  });
+
+  // Zamknij po kliknięciu w link
+  links.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      links.classList.remove('nav-open');
+      btn.setAttribute('aria-expanded', 'false');
+      btn.setAttribute('aria-label', 'Otwórz menu');
+    });
+  });
+
+  // Zamknij po kliknięciu poza menu
+  document.addEventListener('click', e => {
+    if (!btn.contains(e.target) && !links.contains(e.target)) {
+      links.classList.remove('nav-open');
+      btn.setAttribute('aria-expanded', 'false');
+    }
+  });
+})();
+
+/* ----------------------------------------------------------
+   3. Background slideshows (hero + process)
 ---------------------------------------------------------- */
 function initBgSlideshow(selector, intervalMs) {
   const slides = document.querySelectorAll(selector);
