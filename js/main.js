@@ -212,3 +212,133 @@ initBgSlideshow('.process-bg-slide', 6000); // inne tempo = nie są zsynchronizo
   goTo(0);
   startAuto();
 })();
+
+/* ----------------------------------------------------------
+   5. Pełna galeria zdjęć — modal + lightbox
+---------------------------------------------------------- */
+(function () {
+
+  /* ── Dane kategorii ──────────────────────────────────────
+     Aby dodać zdjęcia: wrzuć pliki do odpowiedniego folderu
+     i zwiększ wartość `count`.
+  ──────────────────────────────────────────────────────── */
+  const CATS = {
+    obiekt:   { label: 'Obiekt',           count: 5, dir: 'img/obiekt'   },
+    pokoje:   { label: '14 pokoi',         count: 8, dir: 'img/pokoje'   },
+    sale:     { label: 'Sale szkoleniowe', count: 6, dir: 'img/sale'     },
+    gabinety: { label: 'Gabinety',         count: 6, dir: 'img/gabinety' },
+  };
+
+  const modal    = document.getElementById('gallery-modal');
+  const gmGrid   = document.getElementById('gm-grid');
+  const gmTabs   = document.querySelectorAll('.gm-tab');
+  const lightbox = document.getElementById('lightbox');
+  const lbImg    = document.getElementById('lb-img');
+  const lbCap    = document.getElementById('lb-caption');
+
+  if (!modal || !lightbox) return;
+
+  let currentPhotos = [];
+  let lbIdx = 0;
+
+  /* ── helpers ── */
+  function pad(n) { return String(n).padStart(2, '0'); }
+
+  function openModal(cat) {
+    modal.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+    switchTab(cat || 'obiekt');
+  }
+
+  function closeModal() {
+    modal.classList.remove('is-open');
+    document.body.style.overflow = '';
+  }
+
+  function switchTab(cat) {
+    gmTabs.forEach(t => t.classList.toggle('active', t.dataset.cat === cat));
+    const { dir, count, label } = CATS[cat];
+    currentPhotos = Array.from({ length: count }, (_, i) => ({
+      src: `${dir}/foto-${pad(i + 1)}.jpg`,
+      caption: `${label} — zdjęcie ${i + 1}`,
+    }));
+    renderGrid();
+  }
+
+  function renderGrid() {
+    gmGrid.innerHTML = currentPhotos.map((p, i) => `
+      <div class="gm-photo" data-idx="${i}" style="background-image:url('${p.src}')">
+        <div class="gm-placeholder">${p.caption}</div>
+      </div>`).join('');
+
+    // Ukryj placeholder gdy zdjęcie się załaduje
+    gmGrid.querySelectorAll('.gm-photo').forEach(el => {
+      const img = new Image();
+      img.onload = () => el.classList.add('loaded');
+      img.src = currentPhotos[+el.dataset.idx].src;
+    });
+  }
+
+  /* ── lightbox ── */
+  function openLightbox(idx) {
+    lbIdx = (idx + currentPhotos.length) % currentPhotos.length;
+    lbImg.src = currentPhotos[lbIdx].src;
+    lbImg.alt = currentPhotos[lbIdx].caption;
+    lbCap.textContent = currentPhotos[lbIdx].caption;
+    lightbox.classList.add('is-open');
+  }
+
+  function closeLightbox() { lightbox.classList.remove('is-open'); }
+
+  function lbGo(dir) { openLightbox(lbIdx + dir); }
+
+  /* ── events: modal ── */
+  document.getElementById('open-gallery')
+    ?.addEventListener('click', () => openModal('obiekt'));
+
+  document.querySelectorAll('.venue-room-link').forEach(el => {
+    el.addEventListener('click', () => openModal(el.dataset.cat));
+  });
+
+  document.getElementById('gm-close')
+    ?.addEventListener('click', closeModal);
+  document.getElementById('gm-close-overlay')
+    ?.addEventListener('click', closeModal);
+
+  gmTabs.forEach(t => t.addEventListener('click', () => switchTab(t.dataset.cat)));
+
+  gmGrid.addEventListener('click', e => {
+    const photo = e.target.closest('.gm-photo');
+    if (photo) openLightbox(+photo.dataset.idx);
+  });
+
+  /* ── events: lightbox ── */
+  document.getElementById('lb-close')
+    ?.addEventListener('click', closeLightbox);
+  document.getElementById('lb-overlay')
+    ?.addEventListener('click', closeLightbox);
+  document.getElementById('lb-prev')
+    ?.addEventListener('click', () => lbGo(-1));
+  document.getElementById('lb-next')
+    ?.addEventListener('click', () => lbGo(1));
+
+  /* ── keyboard ── */
+  document.addEventListener('keydown', e => {
+    if (lightbox.classList.contains('is-open')) {
+      if (e.key === 'ArrowLeft')  lbGo(-1);
+      if (e.key === 'ArrowRight') lbGo(1);
+      if (e.key === 'Escape')     closeLightbox();
+    } else if (modal.classList.contains('is-open') && e.key === 'Escape') {
+      closeModal();
+    }
+  });
+
+  /* ── swipe w lightboxie ── */
+  let swipeX = 0;
+  lightbox.addEventListener('touchstart', e => { swipeX = e.changedTouches[0].clientX; }, { passive: true });
+  lightbox.addEventListener('touchend',   e => {
+    const dx = e.changedTouches[0].clientX - swipeX;
+    if (Math.abs(dx) > 40) lbGo(dx < 0 ? 1 : -1);
+  }, { passive: true });
+
+})();
