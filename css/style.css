@@ -131,7 +131,19 @@ section { padding: 6rem 3.5rem; }
 .section-subtitle { font-size: 0.95rem; color: var(--text-mid); line-height: 1.7; max-width: 520px; font-weight: 300; }
 
 /* OFFER */
-.section-offer { background: var(--warm-white); }
+.section-offer { background: var(--warm-white); position: relative; overflow: hidden; }
+.offer-bg { position: absolute; inset: 0; z-index: 0; }
+.offer-bg-slide {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  opacity: 0; transition: opacity 1.4s ease;
+}
+.offer-bg-slide.active { opacity: 1; }
+.offer-bg-overlay {
+  position: absolute; inset: 0;
+  background: rgba(253,250,246,0.88);
+}
+.offer-content { position: relative; z-index: 1; }
 .offer-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3.5rem; flex-wrap: wrap; gap: 1.5rem; }
 .offer-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
 .offer-card { background: var(--green-mist); border-radius: 18px; padding: 2rem; border: 1.5px solid transparent; transition: border-color 0.25s, background 0.25s, box-shadow 0.25s, transform 0.25s; position: relative; overflow: hidden; }

@@ -72,8 +72,9 @@ function initBgSlideshow(selector, intervalMs) {
   }, intervalMs);
 }
 
-initBgSlideshow('.hero-bg-slide', 5000);
-initBgSlideshow('.process-bg-slide', 6000); // inne tempo = nie są zsynchronizowane
+initBgSlideshow('.hero-bg-slide',    5000);
+initBgSlideshow('.offer-bg-slide',   7000); // inne tempo = nie zsynchronizowane z hero
+initBgSlideshow('.process-bg-slide', 6000);
 
 /* ----------------------------------------------------------
    3. Google Reviews
