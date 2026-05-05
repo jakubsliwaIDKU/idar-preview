@@ -134,7 +134,7 @@ section { padding: 6rem 3.5rem; }
 .section-offer { background: var(--warm-white); }
 .offer-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3.5rem; flex-wrap: wrap; gap: 1.5rem; }
 .offer-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
-.offer-card { background: var(--green-mist); border-radius: 18px; padding: 2rem; border: 1.5px solid transparent; transition: all 0.25s; cursor: pointer; position: relative; overflow: hidden; }
+.offer-card { background: var(--green-mist); border-radius: 18px; padding: 2rem; border: 1.5px solid transparent; transition: border-color 0.25s, background 0.25s, box-shadow 0.25s, transform 0.25s; position: relative; overflow: hidden; }
 .offer-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: var(--orange); transform: scaleX(0); transform-origin: left; transition: transform 0.3s; }
 .offer-card:hover { border-color: var(--green-light); background: #fff; box-shadow: 0 8px 30px rgba(42,74,53,0.1); transform: translateY(-3px); }
 .offer-card:hover::after { transform: scaleX(1); }
@@ -143,13 +143,17 @@ section { padding: 6rem 3.5rem; }
 .offer-card.featured .oc-title { color: #fff; }
 .offer-card.featured .oc-desc { color: rgba(255,255,255,0.65); }
 .offer-card.featured .oc-tag { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7); }
+/* Karta sportowa — pełna szerokość, układ poziomy */
+.offer-card.sports { grid-column: span 3; background: var(--sand); display: flex; align-items: flex-start; gap: 2rem; }
+.offer-card.sports:hover { background: var(--sand); border-color: var(--orange); }
+.offer-card.sports .oc-emoji { font-size: 2.8rem; margin-bottom: 0; flex-shrink: 0; }
+.offer-card.sports .oc-body { flex: 1; }
+.offer-card.sports .oc-title { color: var(--text); }
+.offer-card.sports .oc-desc { color: var(--text-mid); }
 .oc-emoji { font-size: 2rem; margin-bottom: 1.2rem; display: block; }
 .oc-title { font-family: 'Fraunces', serif; font-size: 1.3rem; font-weight: 300; color: var(--text); margin-bottom: 0.6rem; line-height: 1.25; }
 .oc-desc { font-size: 0.83rem; color: var(--text-mid); line-height: 1.65; margin-bottom: 1.2rem; font-weight: 300; }
 .oc-tag { display: inline-block; font-size: 0.7rem; font-weight: 500; color: var(--green-mid); background: var(--green-pale); padding: 0.3rem 0.7rem; border-radius: 100px; }
-.oc-arrow { position: absolute; top: 1.5rem; right: 1.5rem; font-size: 1rem; color: var(--text-light); transition: transform 0.2s, color 0.2s; }
-.offer-card:hover .oc-arrow { transform: translate(2px, -2px); color: var(--orange); }
-.offer-card.featured .oc-arrow { color: rgba(255,255,255,0.4); }
 
 /* VENUE */
 .section-venue { background: var(--sand); }
@@ -312,20 +316,13 @@ section { padding: 6rem 3.5rem; }
 .cta-title { font-family: 'Fraunces', serif; font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 300; line-height: 1.15; color: #fff; margin-bottom: 1.2rem; }
 .cta-title em { font-style: italic; color: var(--orange-light); }
 .cta-desc { font-size: 0.9rem; color: rgba(255,255,255,0.6); line-height: 1.75; font-weight: 300; }
-.cta-contact-row { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 2rem; }
-.cta-contact-item { display: flex; align-items: center; gap: 0.7rem; font-size: 0.85rem; color: rgba(255,255,255,0.75); }
-.cta-contact-icon { width: 32px; height: 32px; background: rgba(255,255,255,0.08); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; flex-shrink: 0; }
-.cta-form { background: #fff; border-radius: 20px; padding: 2.5rem; display: flex; flex-direction: column; gap: 1rem; }
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-.ff { display: flex; flex-direction: column; gap: 0.4rem; }
-.ff label { font-size: 0.73rem; font-weight: 600; color: var(--text-mid); }
-.ff input, .ff select, .ff textarea { background: var(--green-mist); border: 1.5px solid var(--green-pale); border-radius: 8px; padding: 0.75rem 0.9rem; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.85rem; color: var(--text); outline: none; transition: border-color 0.2s, box-shadow 0.2s; -webkit-appearance: none; }
-.ff input:focus, .ff select:focus, .ff textarea:focus { border-color: var(--green-light); box-shadow: 0 0 0 3px rgba(90,140,106,0.12); }
-.ff input::placeholder, .ff textarea::placeholder { color: var(--text-light); }
-.ff select option { background: #fff; }
-.ff textarea { resize: vertical; min-height: 90px; }
-.form-btn { background: var(--orange); color: #fff; border: none; border-radius: 10px; padding: 1rem; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: background 0.2s; margin-top: 0.5rem; }
-.form-btn:hover { background: #c4673a; }
+/* Karty kontaktowe (zastąpiły formularz) */
+.cta-cards { display: flex; flex-direction: column; gap: 0.8rem; }
+.cta-card { display: flex; align-items: center; gap: 1rem; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 1.2rem 1.4rem; text-decoration: none; transition: background 0.2s, border-color 0.2s; }
+a.cta-card:hover { background: rgba(255,255,255,0.13); border-color: rgba(255,255,255,0.22); }
+.cta-card-icon { width: 46px; height: 46px; background: rgba(255,255,255,0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+.cta-card-label { font-size: 0.7rem; color: rgba(255,255,255,0.45); margin-bottom: 0.2rem; text-transform: uppercase; letter-spacing: 0.06em; }
+.cta-card-val { font-size: 0.92rem; color: #fff; font-weight: 500; }
 
 /* LOCATION */
 .section-location { background: var(--sand); padding: 6rem 3.5rem; display: flex; flex-direction: column; gap: 3rem; }
